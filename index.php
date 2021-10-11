@@ -3,6 +3,8 @@
 use App\Controller\OrderController;
 use App\Database\Database;
 use App\Mailer\GmailMailer;
+use App\Mailer\SmtpMailer;
+use App\Texter\FaxTexter;
 use App\Texter\SmsTexter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -68,11 +70,23 @@ $container->register('mailer.gmail',GmailMailer::class)
 // $mailer = $container->get('mailer.gmail');
 $container->setDefinition('order_controller',$controllerDefinition);
 
+
+$container->register('mailer.smtp',SmtpMailer::class)
+    ->setArguments(['smtp://localhost','root','123']);
+
+$container->register('texter.fax',FaxTexter::class);
+
 //Ajout d'alias pour les services
 $container->setAlias(OrderController::class, 'order_controller');
 $container->setAlias('App\Database\Database', 'database');
+
 $container->setAlias(GmailMailer::class, 'mailer.gmail');
+$container->setAlias(SmtpMailer::class, 'mailer.smtp');
+$container->setAlias('App\Mailer\MailerInterface', 'mailer.gmail');
+
 $container->setAlias(SmsTexter::class, 'texter.sms');
+$container->setAlias(FaxTexter::class, 'texter.fax');
+$container->setAlias('App\Texter\TexterInterface', 'texter.sms');
 
 $controller = $container->get(OrderController::class);
 
