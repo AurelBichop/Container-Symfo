@@ -17,9 +17,9 @@ $container->setParameter('mailer.gmail_password','1234');
 
 
 $controllerDefinition = new Definition(OrderController::class,[
-    new Reference('database'),
-    new Reference('mailer.gmail'),
-    new Reference('texter.sms'),
+    new Reference(Database::class),
+    new Reference(GmailMailer::class),
+    new Reference(SmsTexter::class),
 ]);
 
 $controllerDefinition
@@ -66,11 +66,15 @@ $container->register('mailer.gmail',GmailMailer::class)
 // $database = $container->get('database');
 // $texter = $container->get('texter.sms');
 // $mailer = $container->get('mailer.gmail');
-
-
 $container->setDefinition('order_controller',$controllerDefinition);
 
-$controller = $container->get('order_controller');
+//Ajout d'alias pour les services
+$container->setAlias(OrderController::class, 'order_controller');
+$container->setAlias('App\Database\Database', 'database');
+$container->setAlias(GmailMailer::class, 'mailer.gmail');
+$container->setAlias(SmsTexter::class, 'texter.sms');
+
+$controller = $container->get(OrderController::class);
 
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
