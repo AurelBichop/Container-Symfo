@@ -8,8 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
-
 require __DIR__ . '/vendor/autoload.php';
 
 $container = new ContainerBuilder();
@@ -30,8 +28,6 @@ $controllerDefinition
     ])
 ;
 
-
-
 $databaseDefinition = new Definition(Database::class);
 $container->setDefinition('database',$databaseDefinition);
 //$container->set('database',new Database());
@@ -50,11 +46,17 @@ $smsTexterDefinition = new Definition(SmsTexter::class,[
 // ]);
 $container->setDefinition('texter.sms',$smsTexterDefinition);
 
-$gmailMailerDefinition = new Definition(GmailMailer::class,[
-    "lior@gmail.com",
-    "123456"
-]);
-$container->setDefinition('mailer.gmail',$gmailMailerDefinition);
+
+// $gmailMailerDefinition = new Definition(GmailMailer::class,[
+//     "lior@gmail.com",
+//     "123456"
+// ]);
+// $container->setDefinition('mailer.gmail',$gmailMailerDefinition);
+$container->register('mailer.gmail',GmailMailer::class)
+    ->setArguments([
+        "lior@gmail.com",
+        "123456"
+    ]);
 
 // $database = $container->get('database');
 // $texter = $container->get('texter.sms');
