@@ -12,6 +12,9 @@ require __DIR__ . '/vendor/autoload.php';
 
 $container = new ContainerBuilder();
 
+$container->setParameter('mailer.gmail_user','lior@gmail.com');
+$container->setParameter('mailer.gmail_password','1234');
+
 
 $controllerDefinition = new Definition(OrderController::class,[
     new Reference('database'),
@@ -54,9 +57,11 @@ $container->setDefinition('texter.sms',$smsTexterDefinition);
 // $container->setDefinition('mailer.gmail',$gmailMailerDefinition);
 $container->register('mailer.gmail',GmailMailer::class)
     ->setArguments([
-        "lior@gmail.com",
-        "123456"
+        "%mailer.gmail_user%",
+        "%mailer.gmail_password%"
     ]);
+
+//var_dump($container->get('mailer.gmail'));
 
 // $database = $container->get('database');
 // $texter = $container->get('texter.sms');
