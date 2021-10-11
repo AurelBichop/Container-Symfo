@@ -21,6 +21,15 @@ $controllerDefinition = new Definition(OrderController::class,[
     new Reference('texter.sms'),
 ]);
 
+$controllerDefinition
+    ->addMethodCall('sayHello',[
+        'mon Petit Message'
+    ])
+    ->addMethodCall('setSecondaryMailer',[
+        new Reference('mailer.gmail')
+    ])
+;
+
 
 
 $databaseDefinition = new Definition(Database::class);
