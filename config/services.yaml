@@ -10,50 +10,28 @@ services:
   _defaults:
     autowire: true
     
-  order_controller:
-    class: App\Controller\OrderController
-    public: true
-    calls:
-      - method: sayHello
-        arguments: ["Bonjour à tous", 33]
+  App\:
+    resource: "../src/*"
+    exclude: "../src/{DependencyInjection}"
 
+  App\Controller\OrderController:
+    public: true
   
-  database:
-    class: App\Database\Database
+  App\Mailer\MailerInterface:
+    alias: App\Mailer\GmailMailer
 
-  logger:
-    class: App\Logger
+  App\Texter\TexterInterface:
+    alias: App\Texter\SmsTexter
 
-  texter:
-    class: App\Texter\SmsTexter
-    arguments: ['services.sms.com','apikey1234']
-    
+  App\Mailer\GmailMailer:
+    arguments:
+      - "%mailer.gmail_user%"
+      - "%mailer.gmail_password%"  
 
-  mailer.gmail:
-    class: App\Mailer\GmailMailer
-    arguments: ['%mailer.gmail_user%','%mailer.gmail_password%']
-    
-                
-  mailer.smtp:
-    class: App\Mailer\SmtpMailer
-    arguments: ['smtp://localhost','root','123']
+  App\Texter\SmsTexter:
+    arguments:
+      $serviceDsn: "send.sms.com"
+      $key: "1234Sms"
 
-  texter.sms:
-    class: App\Texter\SmsTexter
-    arguments: ['services.sms.com','apikey1234']
-    tags: ['with_logger']
-     
-  texter.fax:
-    class: App\Texter\FaxTexter
-
-  App\Controller\OrderController: 
-    alias: order_controller
-    public: true
-  App\Database\Database: '@database'
-  App\Mailer\GmailMailer: '@mailer.gmail'
-  App\Mailer\SmtpMailer: '@mailer.smtp'
-  App\Mailer\MailerInterface: '@mailer.gmail'
-  App\Texter\SmsTexter: '@texter.sms'
-  App\Texter\FaxTexter: '@texter.fax'
-  App\Texter\TexterInterface: '@texter.sms'
-  App\Logger: '@logger'
+      
+  
