@@ -2,9 +2,10 @@
 
 namespace App\Mailer;
 
+use App\HasLoggerInterface;
 use App\Logger;
 
-class GmailMailer implements MailerInterface
+class GmailMailer implements MailerInterface,HasLoggerInterface
 {
 
     protected $user;

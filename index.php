@@ -13,6 +13,7 @@ use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
 require __DIR__ . '/vendor/autoload.php';
@@ -24,10 +25,12 @@ $container->setParameter('mailer.gmail_user','lior@gmail.com');
 $container->setParameter('mailer.gmail_password','1234');
 */
 
-// Chargement de la configuration des services
-$loader = new PhpFileLoader($container,new FileLocator([__DIR__.'/config']));
-$loader->load('services.php');
+// // Chargement de la configuration des services
+// $loader = new PhpFileLoader($container,new FileLocator([__DIR__.'/config']));
+// $loader->load('services.php');
 
+$loader = new YamlFileLoader($container,new FileLocator([__DIR__.'/config']));
+$loader->load('services.yaml');
 
 
 $container->addCompilerPass(new LoggerCompilerPass);

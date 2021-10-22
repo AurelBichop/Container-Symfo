@@ -2,9 +2,10 @@
 
 namespace App\Texter;
 
+use App\HasLoggerInterface;
 use App\Logger;
 
-class SmsTexter implements TexterInterface
+class SmsTexter implements TexterInterface,HasLoggerInterface
 {
     protected $serviceDsn;
     protected $key;
